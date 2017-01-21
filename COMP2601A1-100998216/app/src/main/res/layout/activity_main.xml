@@ -15,33 +15,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/button_empty"
-        android:id="@+id/ibn1"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/button_empty"
-        android:id="@+id/ibn2"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/button_empty"
-        android:id="@+id/ibn3"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/button_empty"
         android:id="@+id/ibn4"
         android:layout_below="@+id/ibn1"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:clickable="false" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -49,15 +26,8 @@
         app:srcCompat="@drawable/button_empty"
         android:id="@+id/ibn5"
         android:layout_below="@+id/ibn2"
-        android:layout_alignStart="@+id/ibn2" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/button_empty"
-        android:id="@+id/ibn6"
-        android:layout_below="@+id/ibn3"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignStart="@+id/ibn2"
+        android:clickable="false" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -65,7 +35,8 @@
         app:srcCompat="@drawable/button_empty"
         android:id="@+id/ibn7"
         android:layout_below="@+id/ibn4"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:clickable="false" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -73,7 +44,8 @@
         app:srcCompat="@drawable/button_empty"
         android:id="@+id/ibn8"
         android:layout_below="@+id/ibn5"
-        android:layout_alignStart="@+id/ibn5" />
+        android:layout_alignStart="@+id/ibn5"
+        android:clickable="false" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -81,17 +53,8 @@
         app:srcCompat="@drawable/button_empty"
         android:id="@+id/ibn9"
         android:layout_below="@+id/ibn6"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:text="Start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnStart"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:minHeight="80dp"
-        android:minWidth="80dp" />
+        android:layout_alignParentEnd="true"
+        android:clickable="false" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -102,5 +65,51 @@
         android:id="@+id/txtResult"
         android:minHeight="50dp"
         android:minWidth="330dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/button_empty"
+        android:id="@+id/ibn1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:clickable="false" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/button_empty"
+        android:id="@+id/ibn2"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:clickable="false" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/button_empty"
+        android:id="@+id/ibn3"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:clickable="false" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/button_empty"
+        android:id="@+id/ibn6"
+        android:layout_below="@+id/ibn3"
+        android:layout_alignParentEnd="true"
+        android:clickable="false" />
+
+    <Button
+        android:text="Start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnStart"
+        android:minHeight="80dp"
+        android:minWidth="80dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

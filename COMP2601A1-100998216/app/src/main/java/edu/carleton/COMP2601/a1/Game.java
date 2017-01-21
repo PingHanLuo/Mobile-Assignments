@@ -5,17 +5,24 @@ package edu.carleton.COMP2601.a1;
  */
 
 public class Game {
-    protected char[] gameBoard;
-    protected boolean playerTurn;
-    protected int placed;
+    private char[] gameBoard;
+    private boolean playerTurn;
+    private int placed;
+    private String winner;
+    private String lastMove;
     public Game(){
         this.gameBoard = new char[9];
-        for(char a : gameBoard){
-            a = ' ';
+        for(int i=0;i<gameBoard.length;i++){
+            //initialize every cell at ' '
+            gameBoard[i] = ' ';
         }
         this.playerTurn = true;
         this.placed = 0;
+        this.winner="";
+        this.lastMove="";
     }
+    public String getLastMove(){return this.lastMove;}
+    public String getResult(){return  this.winner;}
     //places a square for a person
     synchronized public boolean place(int i, boolean isPlayer){
         if(checkSquare(i)) {
@@ -31,6 +38,7 @@ public class Game {
                 playerTurn = true;
             }
             placed++;
+            checkEnd(i);
             return true;
         }else{
             //cannot place on already placed tile
@@ -38,7 +46,8 @@ public class Game {
         }
     }
     //check to see if square it empty
-    protected boolean checkSquare(int i){
+    //double security in this case since Main Activity should have already disabled it
+    private boolean checkSquare(int i){
         if(gameBoard[i] == ' '){
             return true;
         }else{
@@ -46,28 +55,42 @@ public class Game {
         }
     }
     //checks if the game is over
-    public boolean checkEnd(int n){
-        if(placed == 9){
-            return true;
-        }
+    private void checkEnd(int n){
         if(n%2==0){
             //check diagonal
-            if(gameBoard[0] == gameBoard[4] && gameBoard[4] == gameBoard[8]){
-                return true;
-            }else if(gameBoard[2] == gameBoard[4] && gameBoard[4] == gameBoard[6]){
-                return true;
-            }
-        }
-        //check horizontal and vertical
-        for(int i=0;i<3;i++){
-            for (int j=0;j<3;j++){
-                if(gameBoard[(3*i)+j]==gameBoard[(3*i)+j+1]&&gameBoard[(3*i)+j+1]==gameBoard[(3*i)+j+2]){
-                    return true;
-                }else if(gameBoard[(3*j)+i]==gameBoard[(3*j)+i+1]&&gameBoard[(3*j)+i+1]==gameBoard[(3*j)+i+2]){
-                    return true;
+            if(gameBoard[4]!=' ') {
+                if (gameBoard[0] == gameBoard[4] && gameBoard[4] == gameBoard[8]) {
+                    if (gameBoard[4] == 'x')
+                        this.winner = "You";
+                    else
+                        this.winner = "Computer";
+                } else if (gameBoard[2] == gameBoard[4] && gameBoard[4] == gameBoard[6]) {
+                    if (gameBoard[4] == 'x')
+                        this.winner = "You";
+                    else
+                        this.winner = "Computer";
                 }
             }
         }
-        return false;
+        //check horizontal and vertical
+        //find first cell in the column
+        int vertical = n%3;
+        //find first cell in the row
+        int horizontal = (n/3)*3;
+        if(gameBoard[vertical]==gameBoard[vertical+3]&&gameBoard[vertical+3]==gameBoard[vertical+6]){
+            if(gameBoard[vertical]=='x')
+                this.winner="You";
+            else
+                this.winner="Computer";
+        }else if(gameBoard[horizontal]==gameBoard[horizontal+1]&&gameBoard[horizontal+1]==gameBoard[horizontal+2]){
+            if(gameBoard[horizontal]=='x')
+                this.winner="You";
+            else
+                this.winner="Computer";
+        }
+        //9 moves are made. The game is over
+        if(placed == 9){
+            this.winner="No one";
+        }
     }
 }

@@ -11,6 +11,7 @@ public class PlayThread extends Thread {
     public PlayThread(MainActivity main){
         this.main = main;
     }
+    //thread that wait for 2 seconds then places
     public void run(){
         //update UI
         main.update();
