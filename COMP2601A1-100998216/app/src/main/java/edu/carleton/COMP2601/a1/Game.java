@@ -21,6 +21,13 @@ public class Game {
         this.winner="";
         this.lastMove="";
     }
+    //get the x or o to place AFTER place have been called
+    public char getRecentSymbol(){
+        if(playerTurn){
+            return 'o';
+        }
+        return 'x';
+    }
     public String getLastMove(){return this.lastMove;}
     public String getResult(){return  this.winner;}
     //places a square for a person
@@ -48,7 +55,7 @@ public class Game {
     //check to see if square it empty
     //double security in this case since Main Activity should have already disabled it
     private boolean checkSquare(int i){
-        if(gameBoard[i] == ' '){
+        if(gameBoard[i] == ' ' && winner.equals("")){
             return true;
         }else{
             return false;
@@ -56,6 +63,10 @@ public class Game {
     }
     //checks if the game is over
     private void checkEnd(int n){
+        //9 moves are made. The game is over
+        if(placed == 9){
+            this.winner="No one";
+        }
         if(n%2==0){
             //check diagonal
             if(gameBoard[4]!=' ') {
@@ -87,10 +98,6 @@ public class Game {
                 this.winner="You";
             else
                 this.winner="Computer";
-        }
-        //9 moves are made. The game is over
-        if(placed == 9){
-            this.winner="No one";
         }
     }
 }

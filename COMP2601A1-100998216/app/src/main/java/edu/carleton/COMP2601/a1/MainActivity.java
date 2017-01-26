@@ -1,11 +1,14 @@
 package edu.carleton.COMP2601.a1;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import edu.carleton.COMP2601.R;
 
@@ -26,11 +29,10 @@ public class MainActivity extends AppCompatActivity {
                 if(((Button)v).getText().toString().equals("Start")) {
                     //Start the game
                     game = new Game();
-                    computer = new PlayThread(MainActivity.this);
+                    computer = new PlayThread(MainActivity.this, game);
                     ((Button) v).setText("Running");
                     changeGameState(true);
-                    //updateThread();
-                    computer.run();
+                    computer.start();
                 }else{
                     ((Button) v).setText("Start");
                     ((TextView)findViewById(R.id.txtResult)).setText("Game ended.");
@@ -62,45 +64,16 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     //place for player then update UI
-                    xClick(a);
-                    /*if(game.place(a,true)){
-                        ((ImageButton)v).setImageResource(R.drawable.button_x);
+                    if(game.place(a,true)){
+                        updateTile(a,'x');
                         update();
-                        v.setClickable(false);
-                        v.setEnabled(false);
-                    }*/
+                    }
                 }
             });
         }
     }
 
-    public void xClick(final int t){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(game.place(t,true)){
-                    tiles[t].setImageResource(R.drawable.button_x);
-                    update();
-                    tiles[t].setClickable(false);
-                    tiles[t].setEnabled(false);
-                }
-            }
-        });
 
-    }
-    public void yClick(final int t){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if(game.place(t,false)){
-                    tiles[t].setImageResource(R.drawable.button_o);
-                    update();
-                    tiles[t].setClickable(false);
-                    tiles[t].setEnabled(false);
-                }
-            }
-        });
-    }
 
     //either starts the game again or ends the game
     private void changeGameState(boolean clickable){
@@ -115,30 +88,37 @@ public class MainActivity extends AppCompatActivity {
         //refresh result textview
         if(clickable){
             ((TextView)findViewById(R.id.txtResult)).setText("");
+        }else{
+            computer.isRunning=false;
         }
     }
     //update textfield and button if game is over
     synchronized protected void update(){
-        TextView result = (TextView)findViewById(R.id.txtResult);
-        if(!game.getResult().equals("")){
-            ((Button)findViewById(R.id.btnStart)).setText("Start");
-            result.setText("Game is Over " + game.getResult() + " won!");
-            changeGameState(false);
-        }else{
-            result.setText(game.getLastMove());
-        }
-    }
-
-    /*private void updateThread(){
-        new Thread(new Runnable() {
+        runOnUiThread(new Runnable() {
+            @Override
             public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        update();
-                    }
-                });
+                TextView result = (TextView)findViewById(R.id.txtResult);
+                if(!game.getResult().equals("")){
+                    ((Button)findViewById(R.id.btnStart)).setText("Start");
+                    result.setText("Game is Over " + game.getResult() + " won!");
+                    changeGameState(false);
+                }
             }
-        }).start();
-    }*/
+        });
+    }
+    public void updateTile(final int i,final char c){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tiles[i].setClickable(false);
+                tiles[i].setEnabled(false);
+                if(c=='x'){
+                    tiles[i].setImageResource(R.drawable.button_x);
+                }else{
+                    tiles[i].setImageResource(R.drawable.button_o);
+                }
+                ((TextView)findViewById(R.id.txtResult)).setText("Button " + i + " pressed");
+            }
+        });
+    }
 }

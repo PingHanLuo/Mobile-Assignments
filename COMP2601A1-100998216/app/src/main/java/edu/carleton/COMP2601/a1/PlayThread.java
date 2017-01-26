@@ -11,24 +11,29 @@ import edu.carleton.COMP2601.R;
 
 public class PlayThread extends Thread {
     MainActivity main;
+    Game game;
     int count;
-    public PlayThread(MainActivity main){
+    boolean isRunning;
+    public PlayThread(MainActivity main, Game game){
         this.main = main;
+        this.game = game;
         count = 0;
+        isRunning=false;
     }
     //thread that wait for 2 seconds then places
     public void run(){
-        try{
-            while(count < 9) {
-                //for (int i = 0; i < main.tiles.length; i++) {
-                    if (count % 2 == 0) {
-                        main.xClick(count);
-                    } else {
-                        main.yClick(count);
-                    }
-                    count++;
-                    Thread.sleep(100);
-                //}
+        isRunning=true;
+        int i;
+        try {
+            Thread.sleep(2000);
+            while (isRunning) {
+                for(i=0;i<9;i++){
+                    if(game.place(i, false))
+                        break;
+                }
+                main.updateTile(i,game.getRecentSymbol());
+                main.update();
+                Thread.sleep(2000);
             }
         }
         catch (InterruptedException e){
