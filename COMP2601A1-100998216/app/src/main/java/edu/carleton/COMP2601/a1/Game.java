@@ -3,7 +3,7 @@ package edu.carleton.COMP2601.a1;
 /**
  * Created by Luo on 2017-01-18.
  */
-
+//git status - checks which files are new
 public class Game {
     private char[] gameBoard;
     private boolean playerTurn;

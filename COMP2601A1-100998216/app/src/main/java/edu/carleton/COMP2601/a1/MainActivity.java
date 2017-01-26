@@ -12,6 +12,7 @@ import edu.carleton.COMP2601.R;
 public class MainActivity extends AppCompatActivity {
     ImageButton[] tiles;
     Game game;
+    PlayThread computer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,12 +26,16 @@ public class MainActivity extends AppCompatActivity {
                 if(((Button)v).getText().toString().equals("Start")) {
                     //Start the game
                     game = new Game();
+                    computer = new PlayThread(MainActivity.this);
                     ((Button) v).setText("Running");
                     changeGameState(true);
+                    //updateThread();
+                    computer.run();
                 }else{
                     ((Button) v).setText("Start");
                     ((TextView)findViewById(R.id.txtResult)).setText("Game ended.");
                     changeGameState(false);
+                    computer.interrupt();
                 }
             }
         });
@@ -57,16 +62,46 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     //place for player then update UI
-                    if(game.place(a,true)){
+                    xClick(a);
+                    /*if(game.place(a,true)){
                         ((ImageButton)v).setImageResource(R.drawable.button_x);
                         update();
                         v.setClickable(false);
                         v.setEnabled(false);
-                    }
+                    }*/
                 }
             });
         }
     }
+
+    public void xClick(final int t){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(game.place(t,true)){
+                    tiles[t].setImageResource(R.drawable.button_x);
+                    update();
+                    tiles[t].setClickable(false);
+                    tiles[t].setEnabled(false);
+                }
+            }
+        });
+
+    }
+    public void yClick(final int t){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(game.place(t,false)){
+                    tiles[t].setImageResource(R.drawable.button_o);
+                    update();
+                    tiles[t].setClickable(false);
+                    tiles[t].setEnabled(false);
+                }
+            }
+        });
+    }
+
     //either starts the game again or ends the game
     private void changeGameState(boolean clickable){
         for (int i = 0; i < tiles.length; i++) {
@@ -83,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     //update textfield and button if game is over
-    protected void update(){
+    synchronized protected void update(){
         TextView result = (TextView)findViewById(R.id.txtResult);
         if(!game.getResult().equals("")){
             ((Button)findViewById(R.id.btnStart)).setText("Start");
@@ -93,4 +128,17 @@ public class MainActivity extends AppCompatActivity {
             result.setText(game.getLastMove());
         }
     }
+
+    /*private void updateThread(){
+        new Thread(new Runnable() {
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        update();
+                    }
+                });
+            }
+        }).start();
+    }*/
 }
