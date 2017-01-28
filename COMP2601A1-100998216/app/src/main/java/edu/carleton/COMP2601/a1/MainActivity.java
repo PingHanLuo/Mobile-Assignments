@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     //place for player then update UI
                     if(game.place(a,true)){
+                        game.numSet.add(a);
                         updateTile(a,'x');
                         update();
                     }

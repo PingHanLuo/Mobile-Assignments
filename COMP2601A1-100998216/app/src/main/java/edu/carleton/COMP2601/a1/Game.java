@@ -1,5 +1,8 @@
 package edu.carleton.COMP2601.a1;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by Luo on 2017-01-18.
  */
@@ -10,6 +13,7 @@ public class Game {
     private int placed;
     private String winner;
     private String lastMove;
+    Set<Integer> numSet;
     public Game(){
         this.gameBoard = new char[9];
         for(int i=0;i<gameBoard.length;i++){
@@ -20,6 +24,7 @@ public class Game {
         this.placed = 0;
         this.winner="";
         this.lastMove="";
+        this.numSet = new HashSet<Integer>();
     }
     //get the x or o to place AFTER place have been called
     public char getRecentSymbol(){
