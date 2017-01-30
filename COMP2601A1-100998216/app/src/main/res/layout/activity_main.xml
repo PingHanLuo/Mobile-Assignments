@@ -105,13 +105,14 @@
         android:clickable="false" />
 
     <Button
-        android:text="Start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btnStart"
         android:minHeight="80dp"
         android:minWidth="80dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        tools:text="@string/Start"
+        android:text="@string/Start" />
 
 </RelativeLayout>

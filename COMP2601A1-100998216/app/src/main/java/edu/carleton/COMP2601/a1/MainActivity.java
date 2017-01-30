@@ -1,6 +1,5 @@
 package edu.carleton.COMP2601.a1;
 
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,15 +25,15 @@ public class MainActivity extends AppCompatActivity {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(((Button)v).getText().toString().equals("Start")) {
+                if(((Button)v).getText().toString().equals(getString(R.string.Start))) {
                     //Start the game
                     game = new Game();
                     computer = new PlayThread(MainActivity.this, game);
-                    ((Button) v).setText("Running");
+                    ((Button) v).setText(getString(R.string.Running));
                     changeGameState(true);
                     computer.start();
                 }else{
-                    ((Button) v).setText("Start");
+                    ((Button) v).setText(getString(R.string.Start));
                     ((TextView)findViewById(R.id.txtResult)).setText("Game ended.");
                     changeGameState(false);
                     computer.interrupt();
@@ -100,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 TextView result = (TextView)findViewById(R.id.txtResult);
                 if(!game.getResult().equals("")){
-                    ((Button)findViewById(R.id.btnStart)).setText("Start");
+                    ((Button)findViewById(R.id.btnStart)).setText(getString(R.string.Start));
                     result.setText("Game is Over " + game.getResult() + " won!");
                     changeGameState(false);
                 }
