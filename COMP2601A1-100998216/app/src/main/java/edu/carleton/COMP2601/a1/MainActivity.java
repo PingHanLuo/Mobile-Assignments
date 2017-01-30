@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
                     computer.start();
                 }else{
                     ((Button) v).setText(getString(R.string.Start));
-                    ((TextView)findViewById(R.id.txtResult)).setText("Game ended.");
+                    ((TextView)findViewById(R.id.txtResult)).setText(getString(R.string.GameEnded));
                     changeGameState(false);
                     computer.interrupt();
                 }

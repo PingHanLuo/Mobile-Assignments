@@ -2,4 +2,5 @@
     <string name="app_name">COMP2601A1-100998216</string>
     <string name="Start">Start</string>
     <string name="Running">Running</string>
+    <string name="GameEnded">Game Ended</string>
 </resources>
