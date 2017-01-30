@@ -10,7 +10,8 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 import edu.carleton.COMP2601.R;
-
+/*Robin Luo 100998216
+  Michael Kameoka 100980710 */
 public class MainActivity extends AppCompatActivity {
     ImageButton[] tiles;
     Game game;

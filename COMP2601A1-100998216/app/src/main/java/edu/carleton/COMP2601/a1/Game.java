@@ -6,6 +6,8 @@ import java.util.Set;
 /**
  * Created by Luo on 2017-01-18.
  */
+/*Robin Luo 100998216
+  Michael Kameoka 100980710 */
 //git status - checks which files are new
 public class Game {
     private char[] gameBoard;

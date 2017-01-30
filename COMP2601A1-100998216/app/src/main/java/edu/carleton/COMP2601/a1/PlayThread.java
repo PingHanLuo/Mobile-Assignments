@@ -12,6 +12,8 @@ import edu.carleton.COMP2601.R;
 /**
  * Created by Luo on 2017-01-19.
  */
+/*Robin Luo 100998216
+  Michael Kameoka 100980710 */
 
 public class PlayThread extends Thread {
     MainActivity main;
