@@ -41,6 +41,12 @@ public class Server {
                     users.put((String) event.get(Fields.ID), twr);
                     event.put("users",otherUsers);
                     es.putEvent(response);
+                    //notify other users that a new user have been added
+                    for (String username : otherUsers){
+                        Event newUserEvent = new Event("new user",users.get(username).getEventSource());
+                        newUserEvent.put("user",event.get(Fields.ID));
+                        users.get(username).getEventSource().putEvent(newUserEvent);
+                    }
                 }catch (Exception e){
                     e.printStackTrace();
                 }

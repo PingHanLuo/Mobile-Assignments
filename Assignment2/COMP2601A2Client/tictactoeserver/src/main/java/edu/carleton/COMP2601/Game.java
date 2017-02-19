@@ -39,16 +39,17 @@ public class Game {
     public String getLastMove(){return this.lastMove;}
     public String getResult(){return  this.winner;}
     //places a square for a person
-    synchronized public boolean place(int i, boolean isPlayer){
+    //turn will be false for p2 and true for p1
+    synchronized public boolean place(int i, boolean turn){
+        if(turn != playerTurn){
+            //unauthorized it is not that player's turn
+            return false;
+        }
         if(checkSquare(i)) {
             if (playerTurn) {
                 gameBoard[i] = 'x';
                 playerTurn = false;
             } else {
-                if(isPlayer){
-                    //unauthorized, player cannot play for computer
-                    return false;
-                }
                 gameBoard[i] = 'o';
                 playerTurn = true;
             }
