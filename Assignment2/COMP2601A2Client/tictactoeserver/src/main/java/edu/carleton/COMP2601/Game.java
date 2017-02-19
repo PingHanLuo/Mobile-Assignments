@@ -1,12 +1,16 @@
-package edu.carleton.COMP2601.a1;
+package edu.carleton.COMP2601;
 
 import java.util.HashSet;
 import java.util.Set;
 
-/*Robin Luo 100998216
+/**
+ * Created by Luo on 2017-02-18.
+ */
+
+public class Game {
+    /*Robin Luo 100998216
   Michael Kameoka 100980710 */
 //git status - checks which files are new
-public class Game {
     private char[] gameBoard;
     private boolean playerTurn;
     private int placed;
