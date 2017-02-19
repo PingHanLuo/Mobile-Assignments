@@ -73,21 +73,21 @@ public class Game {
     private void checkEnd(int n){
         //9 moves are made. The game is over
         if(placed == 9){
-            this.winner="No one";
+            this.winner="0";
         }
         if(n%2==0){
             //check diagonal
             if(gameBoard[4]!=' ') {
                 if (gameBoard[0] == gameBoard[4] && gameBoard[4] == gameBoard[8]) {
                     if (gameBoard[4] == 'x')
-                        this.winner = "You";
+                        this.winner = "p1";
                     else
-                        this.winner = "Computer";
+                        this.winner = "p2";
                 } else if (gameBoard[2] == gameBoard[4] && gameBoard[4] == gameBoard[6]) {
                     if (gameBoard[4] == 'x')
-                        this.winner = "You";
+                        this.winner = "p1";
                     else
-                        this.winner = "Computer";
+                        this.winner = "p2";
                 }
             }
         }
@@ -98,14 +98,14 @@ public class Game {
         int horizontal = (n/3)*3;
         if(gameBoard[vertical]==gameBoard[vertical+3]&&gameBoard[vertical+3]==gameBoard[vertical+6]){
             if(gameBoard[vertical]=='x')
-                this.winner="You";
+                this.winner="p1";
             else
-                this.winner="Computer";
+                this.winner="p2";
         }else if(gameBoard[horizontal]==gameBoard[horizontal+1]&&gameBoard[horizontal+1]==gameBoard[horizontal+2]){
             if(gameBoard[horizontal]=='x')
-                this.winner="You";
+                this.winner="p1";
             else
-                this.winner="Computer";
+                this.winner="p2";
         }
     }
 }
