@@ -2,7 +2,7 @@ package edu.carleton.COMP2601.comp2601a2client.common.messaging;
 
 import java.io.Serializable;
 
-import edu.carleton.COMP2601.communication.Fields;
+import edu.carleton.COMP2601.comp2601a2client.communication.Fields;
 
 public class Header implements Serializable {
 	/**

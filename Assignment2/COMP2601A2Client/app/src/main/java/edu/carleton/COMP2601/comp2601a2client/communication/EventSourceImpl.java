@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.util.Map;
 
-import edu.carleton.COMP2601.common.messaging.Message;
+import edu.carleton.COMP2601.comp2601a2client.common.messaging.Message;
 
 public class EventSourceImpl implements EventSource {
 

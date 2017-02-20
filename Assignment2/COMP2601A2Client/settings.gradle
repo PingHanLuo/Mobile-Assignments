@@ -1,1 +1,1 @@
-include ':app', ':tictactoeserver'
+include ':app', ':COMP1601A2Server'

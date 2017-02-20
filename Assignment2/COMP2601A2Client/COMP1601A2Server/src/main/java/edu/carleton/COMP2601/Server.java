@@ -18,7 +18,6 @@ import edu.carleton.COMP2601.communication.Reactor;
 import edu.carleton.COMP2601.communication.ThreadWithReactor;
 
 public class Server {
-    public static final String ipAddr = "192.168.0.17";
     public static final int PORT = 5001;
     private Reactor reactor;
     private EventSourceImpl es;
@@ -31,6 +30,7 @@ public class Server {
         reactor.register("connect", new EventHandler() {
             @Override
             public void handleEvent(Event event) {
+                System.out.println("recieved");
                 try {
                     Event response = new Event("connect", es);
                     //get hashmap of users
