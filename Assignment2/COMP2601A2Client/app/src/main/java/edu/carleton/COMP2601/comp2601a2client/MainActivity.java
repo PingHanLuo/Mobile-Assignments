@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             public void handleEvent(Event event) {
                 //fill players
                 listAdapter.addAll((ArrayList<String>)event.get("users"));
-                Toast.makeText(getApplicationContext(),"recieved response",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Connected!",Toast.LENGTH_SHORT).show();
             }
         });
         reactor.register("new user", new EventHandler() {

@@ -19,8 +19,9 @@ import edu.carleton.COMP2601.comp2601a2client.communication.ThreadWithReactor;
  */
 
 public class NetworkingService extends Service {
-    int port = 5001;
+    int port = 7001;
     String addr = "192.168.0.17";
+//    String addr = "10.0.2.2";
     Socket s;
     EventSourceImpl es;
     ThreadWithReactor twr;
@@ -40,10 +41,9 @@ public class NetworkingService extends Service {
         es = new EventSourceImpl(s.getOutputStream(),s.getInputStream());
         twr = new ThreadWithReactor(es,MainActivity.getInstance().reactor);
         //Send CONNECT_REQUEST
-        Event connectEvent = new Event("connect",es);
+        Event connectEvent = new Event("CONNECT_REQUEST",es);
         connectEvent.put(Fields.ID,userid);
         es.putEvent(connectEvent);
         twr.start();
     }
-
 }

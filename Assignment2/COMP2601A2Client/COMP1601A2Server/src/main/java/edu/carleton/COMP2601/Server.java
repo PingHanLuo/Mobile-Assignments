@@ -18,7 +18,7 @@ import edu.carleton.COMP2601.communication.Reactor;
 import edu.carleton.COMP2601.communication.ThreadWithReactor;
 
 public class Server {
-    public static final int PORT = 5001;
+    public static final int PORT = 7001;
     private Reactor reactor;
     private EventSourceImpl es;
     private ThreadWithReactor twr;
@@ -27,12 +27,12 @@ public class Server {
     public Server(){
         users = new ConcurrentHashMap<>();
         reactor = new Reactor();
-        reactor.register("connect", new EventHandler() {
+        reactor.register("CONNECT_REQUEST", new EventHandler() {
             @Override
             public void handleEvent(Event event) {
                 System.out.println("recieved");
                 try {
-                    Event response = new Event("connect", es);
+                    Event response = new Event("CONNECT_REQUEST", es);
                     //get hashmap of users
                     ArrayList<String> otherUsers = new ArrayList<String>();
                     for(Object user : ((Map)users).keySet()){
@@ -42,11 +42,11 @@ public class Server {
                     event.put("users",otherUsers);
                     es.putEvent(response);
                     //notify other users that a new user have been added
-                    for (String username : otherUsers){
+                    /*for (String username : otherUsers){
                         Event newUserEvent = new Event("new user",users.get(username).getEventSource());
                         newUserEvent.put("user",event.get(Fields.ID));
                         users.get(username).getEventSource().putEvent(newUserEvent);
-                    }
+                    }*/
                 }catch (Exception e){
                     e.printStackTrace();
                 }
