@@ -7,8 +7,10 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import edu.carleton.COMP2601.comp2601a2client.common.messaging.Message;
 import edu.carleton.COMP2601.comp2601a2client.communication.Event;
 import edu.carleton.COMP2601.comp2601a2client.communication.EventSourceImpl;
 import edu.carleton.COMP2601.comp2601a2client.communication.Fields;
@@ -23,7 +25,6 @@ public class NetworkingService extends Service {
     String addr = "192.168.0.17";
 //    String addr = "10.0.2.2";
     Socket s;
-    EventSourceImpl es;
     ThreadWithReactor twr;
     private IBinder binder = new MyBinder();
     public class MyBinder extends Binder {
@@ -38,12 +39,12 @@ public class NetworkingService extends Service {
     }
     public void connect(String userid) throws IOException, ClassNotFoundException{
         s = new Socket(addr,port);
-        es = new EventSourceImpl(s.getOutputStream(),s.getInputStream());
-        twr = new ThreadWithReactor(es,MainActivity.getInstance().reactor);
+        MainActivity.getInstance().es = new EventSourceImpl(s.getOutputStream(),s.getInputStream());
+        twr = new ThreadWithReactor(MainActivity.getInstance().es,MainActivity.getInstance().reactor);
         //Send CONNECT_REQUEST
-        Event connectEvent = new Event("CONNECT_REQUEST",es);
+        Event connectEvent = new Event("CONNECT_REQUEST",MainActivity.getInstance().es);
         connectEvent.put(Fields.ID,userid);
-        es.putEvent(connectEvent);
+        MainActivity.getInstance().es.putEvent(connectEvent);
         twr.start();
     }
 }

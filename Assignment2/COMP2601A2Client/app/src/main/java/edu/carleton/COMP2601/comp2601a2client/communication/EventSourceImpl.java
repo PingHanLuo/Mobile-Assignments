@@ -16,7 +16,14 @@ public class EventSourceImpl implements EventSource {
 	ObjectInputStream ois;
 	ObjectOutputStream oos;
 	Socket socket;
-	
+
+	public ObjectInputStream getOis(){
+		return ois;
+	}
+	public ObjectOutputStream getOos(){
+		return oos;
+	}
+
 	/*
 	 * Allows streams to be created: input followed by output
 	 */
