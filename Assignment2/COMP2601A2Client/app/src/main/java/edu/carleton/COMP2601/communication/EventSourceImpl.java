@@ -1,4 +1,4 @@
-package edu.carleton.COMP2601.comp2601a2client.communication;
+package edu.carleton.COMP2601.communication;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,20 +9,13 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.util.Map;
 
-import edu.carleton.COMP2601.comp2601a2client.common.messaging.Message;
+import edu.carleton.COMP2601.common.messaging.Message;
 
 public class EventSourceImpl implements EventSource {
 
 	ObjectInputStream ois;
 	ObjectOutputStream oos;
 	Socket socket;
-
-	public ObjectInputStream getOis(){
-		return ois;
-	}
-	public ObjectOutputStream getOos(){
-		return oos;
-	}
 
 	/*
 	 * Allows streams to be created: input followed by output

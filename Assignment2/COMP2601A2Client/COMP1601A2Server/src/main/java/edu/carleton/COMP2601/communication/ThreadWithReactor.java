@@ -33,9 +33,7 @@ public class ThreadWithReactor extends Thread implements ReactorInterface {
 		while (running) {
 			Event event;
 			try {
-				System.out.println("waiting for event");
 				event = source.getEvent();
-				System.out.println("got event");
 				if (event != null) {
 					try {
 						dispatch(event);

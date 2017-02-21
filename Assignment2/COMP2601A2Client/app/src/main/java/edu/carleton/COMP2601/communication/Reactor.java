@@ -1,4 +1,4 @@
-package edu.carleton.COMP2601.comp2601a2client.communication;
+package edu.carleton.COMP2601.communication;
 
 import java.util.HashMap;
 

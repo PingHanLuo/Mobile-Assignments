@@ -70,7 +70,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button"
+        android:id="@+id/btnStart"
         android:minHeight="80dp"
         android:minWidth="80dp"
         tools:text="@string/Start"

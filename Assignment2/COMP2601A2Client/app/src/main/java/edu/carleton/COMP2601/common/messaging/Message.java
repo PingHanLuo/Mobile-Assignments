@@ -1,4 +1,4 @@
-package edu.carleton.COMP2601.comp2601a2client.common.messaging;
+package edu.carleton.COMP2601.common.messaging;
 
 import java.io.Serializable;
 

@@ -5,4 +5,6 @@
     <string name="decline">Decline</string>
     <string name="find_player_ui">Tic Tac Toe: Users</string>
     <string name="Start">Start</string>
+    <string name="GameEnded">Game Ended</string>
+    <string name="Stop">Stop</string>
 </resources>
