@@ -134,9 +134,9 @@ public class GameActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         ((TextView)findViewById(R.id.txtResult)).setText(output);
+                        ((Button)findViewById(R.id.btnStart)).setText(R.string.Start);
                     }
                 });
-                ((Button)findViewById(R.id.btnStart)).setText(R.string.Start);
             }
         });
     }
