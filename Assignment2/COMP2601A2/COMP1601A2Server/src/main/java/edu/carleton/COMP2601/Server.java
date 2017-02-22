@@ -1,6 +1,7 @@
 package edu.carleton.COMP2601;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,13 +65,21 @@ public class Server {
                 }
             }
         });
+        //No Specific JSON is needed since this is purely passing of one's ID
         reactor.register("PLAY_GAME_REQUEST", new EventHandler() {
             @Override
             public void handleEvent(Event event) {
                 try {
-                    String player = (String) event.get(Fields.RET_ID);
+                    JSONObject data = new JSONObject((String)event.get("data"));
+                    String challenger = (String)data.get("challenger");
+                    String player = (String) data.get("receiver");
                     Event request = new Event("PLAY_GAME_REQUEST", users.get(player).getEventSource());
-                    request.put(Fields.ID, event.get(Fields.ID));
+                    JSONObject reciever = new JSONObject();
+                    reciever.put("player",player);
+                    reciever.put("challenger",challenger);
+                    HashMap<String,Serializable> hm = new HashMap<String, Serializable>();
+                    hm.put("data",reciever.toString());
+                    request.put(Fields.BODY,hm);
                     users.get(player).getEventSource().putEvent(request);
                 }catch (Exception e){
                     e.printStackTrace();
@@ -88,11 +97,12 @@ public class Server {
                         gameTracker.put((String)event.get(Fields.ID),game);
                         gameTracker.put(player,game);
                     }
-                    System.out.println(player);
                     Event response = new Event("PLAY_GAME_RESPONSE",users.get(player).getEventSource());
                     response.put(Fields.ID,event.get(Fields.ID));
                     HashMap<String, Serializable> hm = new HashMap<String, Serializable>();
-                    hm.put("status",event.get("status"));
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("status", event.get("status"));
+                    hm.put("data",jsonObject.toString());
                     response.put(Fields.BODY,hm);
                     users.get(player).getEventSource().putEvent(response);
                 }catch (Exception e){
@@ -104,7 +114,6 @@ public class Server {
             @Override
             public void handleEvent(Event event) {
                 try {
-                    System.out.println("Request Recieved");
                     users.remove((String)event.get(Fields.ID)).quit();
                     ArrayList<String> allUsers = new ArrayList<String>();
                     JSONArray jsonUsers = new JSONArray();
@@ -124,14 +133,17 @@ public class Server {
                 }
             }
         });
-
+        //simple notify message, does not need extensive JSON
         reactor.register("GAME_ON", new EventHandler() {
             @Override
             public void handleEvent(Event event) {
                 try {
                     Event gameOn = new Event("GAME_ON",es);
-                    gameOn.put(Fields.ID,event.get(Fields.ID));
-                    users.get(event.get(Fields.RET_ID)).getEventSource().putEvent(gameOn);
+                    HashMap<String,Serializable> hm = new HashMap<>();
+                    JSONObject data = new JSONObject((String)event.get("data"));
+                    hm.put("data",data.toString());
+                    gameOn.put(Fields.BODY,hm);
+                    users.get(data.get("receiver")).getEventSource().putEvent(gameOn);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -141,31 +153,34 @@ public class Server {
         reactor.register("MOVE_MESSAGE", new EventHandler() {
             @Override
             public void handleEvent(Event event) {
-                if(gameTracker.get(event.get(Fields.ID)).place((int)event.get("move"),(String)event.get(Fields.ID))){
+                JSONObject incData = new JSONObject((String)event.get("data"));
+                if(gameTracker.get(event.get(Fields.ID)).place((int)incData.get("move"),(String)event.get(Fields.ID))){
                     try {
                         //if move succeeds then send result
                         String player2 = (String) event.get(Fields.RET_ID);
                         Event p1gameboardEvent = new Event("MOVE_MESSAGE", es);
                         Event p2gameboardEvent = new Event("MOVE_MESSAGE", users.get(player2).getEventSource());
                         HashMap<String, Serializable> hm = new HashMap<String, Serializable>();
-                        hm.put("symbol", gameTracker.get(event.get(Fields.ID)).getPreviousSymbol());
-                        hm.put("location", event.get("move"));
+                        JSONObject data = new JSONObject();
+                        data.put("symbol", gameTracker.get(event.get(Fields.ID)).getPreviousSymbol());
+                        data.put("location", incData.get("move"));
+                        hm.put("data",data.toString());
                         p1gameboardEvent.put(Fields.BODY, hm);
                         p2gameboardEvent.put(Fields.BODY, hm);
                         p1gameboardEvent.put(Fields.ID,event.get(Fields.ID));
                         p2gameboardEvent.put(Fields.ID,event.get(Fields.ID));
-                        System.out.println("player 1 " + event.get(Fields.ID));
-                        System.out.println("player 2 " + player2);
                         users.get(event.get(Fields.ID)).getEventSource().putEvent(p1gameboardEvent);
                         users.get(player2).getEventSource().putEvent(p2gameboardEvent);
                         if(!gameTracker.get(event.get(Fields.ID)).getResult().equals("")) {
                             //game ended
                             Event p1gameoverEvent = new Event("GAME_OVER", es);
                             Event p2gameoverEvent = new Event("GAME_OVER", users.get(player2).getEventSource());
-                            HashMap<String, Serializable> results = new HashMap<>();
+                            HashMap<String, Serializable> dataResults = new HashMap<>();
+                            JSONObject results = new JSONObject();
                             results.put("winner",gameTracker.get(event.get(Fields.ID)).getResult());
-                            p1gameoverEvent.put(Fields.BODY,results);
-                            p2gameoverEvent.put(Fields.BODY,results);
+                            dataResults.put("data",results.toString());
+                            p1gameoverEvent.put(Fields.BODY,dataResults);
+                            p2gameoverEvent.put(Fields.BODY,dataResults);
                             users.get(event.get(Fields.ID)).getEventSource().putEvent(p1gameoverEvent);
                             users.get(player2).getEventSource().putEvent(p2gameoverEvent);
                             Game g = new Game((String)event.get(Fields.ID),player2);
@@ -187,7 +202,9 @@ public class Server {
                     String player2 = (String) event.get(Fields.RET_ID);
                     Event p2gameoverEvent = new Event("GAME_OVER", users.get(player2).getEventSource());
                     HashMap<String, Serializable> results = new HashMap<>();
-                    results.put("winner","forced");
+                    JSONObject data = new JSONObject();
+                    data.put("winner", "forced");
+                    results.put("data",data.toString());
                     p2gameoverEvent.put(Fields.BODY,results);
                     users.get(player2).getEventSource().putEvent(p2gameoverEvent);
                     Game g = new Game(player1,player2);

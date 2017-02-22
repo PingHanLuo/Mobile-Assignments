@@ -6,6 +6,9 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -25,9 +28,9 @@ import edu.carleton.COMP2601.communication.ThreadWithReactor;
 public class NetworkingService extends Service {
     int port = 7001;
     //home ip
-    String addr = "192.168.0.17";
+    //String addr = "192.168.0.17";
     //carleton ip
-    //String addr = "172.17.42.172";
+    String addr = "172.17.42.172";
     //standard
 //    String addr = "10.0.0.1";
     Socket s;
@@ -56,10 +59,18 @@ public class NetworkingService extends Service {
     }
 
     public void request(String name) throws IOException{
-        Event gameRequest = new Event("PLAY_GAME_REQUEST",es);
-        gameRequest.put(Fields.ID,MainActivity.getInstance().userid);
-        gameRequest.put(Fields.RET_ID,name);
-        es.putEvent(gameRequest);
+        try {
+            Event gameRequest = new Event("PLAY_GAME_REQUEST",es);
+            HashMap<String,Serializable> hm = new HashMap<>();
+            JSONObject data = new JSONObject();
+            data.put("challenger",MainActivity.getInstance().userid);
+            data.put("receiver", name);
+            hm.put("data",data.toString());
+            gameRequest.put(Fields.BODY,hm);
+            es.putEvent(gameRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void disconnect() throws IOException {
@@ -69,20 +80,34 @@ public class NetworkingService extends Service {
     }
 
     public void startGame() throws IOException{
-        Event gameOn = new Event("GAME_ON",es);
-        gameOn.put(Fields.ID,MainActivity.getInstance().userid);
-        gameOn.put(Fields.RET_ID,MainActivity.getInstance().opponent);
-        es.putEvent(gameOn);
+        try {
+            Event gameOn = new Event("GAME_ON",es);
+            HashMap<String,Serializable> hm = new HashMap<>();
+            JSONObject data = new JSONObject();
+            data.put("starter",MainActivity.getInstance().userid);
+            data.put("receiver", MainActivity.getInstance().opponent);
+            hm.put("data",data.toString());
+            gameOn.put(Fields.BODY,hm);
+            es.putEvent(gameOn);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void place(int i) throws IOException{
-        Event placeRequest = new Event("MOVE_MESSAGE",es);
-        placeRequest.put(Fields.ID,MainActivity.getInstance().userid);
-        placeRequest.put(Fields.RET_ID,MainActivity.getInstance().opponent);
-        HashMap<String, Serializable> hm = new HashMap<>();
-        hm.put("move",i);
-        placeRequest.put(Fields.BODY,hm);
-        es.putEvent(placeRequest);
+    public void place(int i) throws IOException {
+        try {
+            Event placeRequest = new Event("MOVE_MESSAGE", es);
+            placeRequest.put(Fields.ID, MainActivity.getInstance().userid);
+            placeRequest.put(Fields.RET_ID, MainActivity.getInstance().opponent);
+            HashMap<String, Serializable> hm = new HashMap<>();
+            JSONObject data = new JSONObject();
+            data.put("move", i);
+            hm.put("data", data.toString());
+            placeRequest.put(Fields.BODY, hm);
+            es.putEvent(placeRequest);
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
     public void endGame() throws IOException{
         Event endRequest = new Event("GAME_OVER",es);

@@ -8,6 +8,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -40,6 +43,12 @@ public class GameActivity extends AppCompatActivity {
                         ((Button) v).setText(getString(R.string.Stop));
                         changeGameState(true);
                         setSpacesLeft();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ((TextView)findViewById(R.id.txtResult)).setText("");
+                            }
+                        });
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -124,45 +133,62 @@ public class GameActivity extends AppCompatActivity {
             public void handleEvent(Event event) {
                 changeGameState(true);
                 setSpacesLeft();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ((Button)findViewById(R.id.btnStart)).setText(R.string.Stop);
-                    }
-                });
+                try {
+                    JSONObject data = new JSONObject((String) event.get("data"));
+                    final String starter = (String)data.get("starter");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((TextView)findViewById(R.id.txtResult)).setText(starter + " has started a game");
+                            ((Button) findViewById(R.id.btnStart)).setText(R.string.Stop);
+                        }
+                    });
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
         reactor.register("MOVE_MESSAGE", new EventHandler() {
             @Override
             public void handleEvent(Event event) {
-                updateTile((int)event.get("location"),(char)event.get("symbol"),(String)event.get(Fields.ID));
-                spacesLeft[(int)event.get("location")] = -1;
-                unlockSpecificSpaces();
+                try {
+                    JSONObject data = new JSONObject((String)event.get("data"));
+                    updateTile((int)data.get("location"),Character.toChars((int)data.get("symbol"))[0],(String)event.get(Fields.ID));
+                    spacesLeft[(int)data.get("location")] = -1;
+                    unlockSpecificSpaces();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
         reactor.register("GAME_OVER", new EventHandler() {
             @Override
             public void handleEvent(final Event event) {
-                String result;
-                if((event.get("winner")).equals(MainActivity.getInstance().userid)){
-                    result = "You won the game";
-                }else if((event.get("winner")).equals(MainActivity.getInstance().opponent)){
-                    result = event.get("winner") + " won the game";
-                }else if(event.get("winner").equals("forced")){
-                    result = MainActivity.getInstance().opponent + " ended the game";
-                }else{
-                    result = "The game was a draw";
-                }
-                //bypass the final requirement
-                final String output = result;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ((TextView)findViewById(R.id.txtResult)).setText(output);
-                        ((Button)findViewById(R.id.btnStart)).setText(R.string.Start);
+                try {
+                    JSONObject data = new JSONObject((String)event.get("data"));
+                    String result;
+                    if((data.get("winner")).equals(MainActivity.getInstance().userid)){
+                        result = "I won the game";
+                    }else if((data.get("winner")).equals(MainActivity.getInstance().opponent)){
+                        result = data.get("winner") + " won the game";
+                    }else if(data.get("winner").equals("forced")){
+                        result = MainActivity.getInstance().opponent + " ended the game";
+                    }else{
+                        result = "The game was a draw";
                     }
-                });
-                changeGameState(false);
+                    //bypass the final requirement
+                    final String output = result;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((TextView)findViewById(R.id.txtResult)).setText(output);
+                            ((Button)findViewById(R.id.btnStart)).setText(R.string.Start);
+                        }
+                    });
+                    changeGameState(false);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -218,6 +244,7 @@ public class GameActivity extends AppCompatActivity {
     public void onDestroy(){
         try{
             ns.endGame();
+            super.onDestroy();
         }catch (Exception e){
             e.printStackTrace();
         }
