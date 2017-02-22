@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             public void handleEvent(final Event event) {
                 if((boolean)event.get("status") == true){
                     Intent gameIntent = new Intent(getApplicationContext(),GameActivity.class);
-                    opponent = (String)event.get(Fields.RET_ID);
+                    opponent = (String)event.get(Fields.ID);
                     startActivity(gameIntent);
                 }else{
                     runOnUiThread(new Runnable() {

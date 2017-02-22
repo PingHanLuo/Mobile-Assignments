@@ -91,7 +91,6 @@ public class Server {
                     System.out.println(player);
                     Event response = new Event("PLAY_GAME_RESPONSE",users.get(player).getEventSource());
                     response.put(Fields.ID,event.get(Fields.ID));
-                    response.put(Fields.RET_ID,player);
                     HashMap<String, Serializable> hm = new HashMap<String, Serializable>();
                     hm.put("status",event.get("status"));
                     response.put(Fields.BODY,hm);
@@ -148,7 +147,6 @@ public class Server {
                             //if move succeeds then send result
                             String player2 = (String) event.get(Fields.RET_ID);
                             Event p1gameboardEvent = new Event("MOVE_MESSAGE", es);
-                            System.out.println("ret id is " + player2);
                             Event p2gameboardEvent = new Event("MOVE_MESSAGE", users.get(player2).getEventSource());
                             HashMap<String, Serializable> hm = new HashMap<String, Serializable>();
                             hm.put("symbol", gameTracker.get(event.get(Fields.ID)).getPreviousSymbol());
@@ -157,7 +155,9 @@ public class Server {
                             p2gameboardEvent.put(Fields.BODY, hm);
                             p1gameboardEvent.put(Fields.ID,event.get(Fields.ID));
                             p2gameboardEvent.put(Fields.ID,event.get(Fields.ID));
-                            es.putEvent(p1gameboardEvent);
+                            System.out.println("player 1 " + event.get(Fields.ID));
+                            System.out.println("player 2 " + player2);
+                            users.get(event.get(Fields.ID)).getEventSource().putEvent(p1gameboardEvent);
                             users.get(player2).getEventSource().putEvent(p2gameboardEvent);
                         }else{
                             //game ended

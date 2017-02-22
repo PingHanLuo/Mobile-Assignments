@@ -82,7 +82,6 @@ public class NetworkingService extends Service {
         HashMap<String, Serializable> hm = new HashMap<>();
         hm.put("move",i);
         placeRequest.put(Fields.BODY,hm);
-
         es.putEvent(placeRequest);
     }
 }

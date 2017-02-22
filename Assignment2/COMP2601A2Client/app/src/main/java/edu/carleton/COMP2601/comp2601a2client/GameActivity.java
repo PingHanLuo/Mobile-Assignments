@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -98,6 +99,12 @@ public class GameActivity extends AppCompatActivity {
         reactor.register("MOVE_MESSAGE", new EventHandler() {
             @Override
             public void handleEvent(Event event) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), MainActivity.getInstance().userid + " has updated",Toast.LENGTH_LONG).show();
+                    }
+                });
                 updateTile((int)event.get("location"),(char)event.get("symbol"),(String)event.get(Fields.ID));
             }
         });
