@@ -168,6 +168,9 @@ public class Server {
                             p2gameoverEvent.put(Fields.BODY,results);
                             users.get(event.get(Fields.ID)).getEventSource().putEvent(p1gameoverEvent);
                             users.get(player2).getEventSource().putEvent(p2gameoverEvent);
+                            Game g = new Game((String)event.get(Fields.ID),player2);
+                            gameTracker.put((String)event.get(Fields.ID),g);
+                            gameTracker.put(player2,g);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
