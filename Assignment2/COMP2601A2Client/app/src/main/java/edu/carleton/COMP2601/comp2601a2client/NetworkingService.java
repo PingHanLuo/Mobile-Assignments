@@ -84,4 +84,10 @@ public class NetworkingService extends Service {
         placeRequest.put(Fields.BODY,hm);
         es.putEvent(placeRequest);
     }
+    public void endGame() throws IOException{
+        Event endRequest = new Event("GAME_OVER",es);
+        endRequest.put(Fields.ID,MainActivity.getInstance().userid);
+        endRequest.put(Fields.RET_ID,MainActivity.getInstance().opponent);
+        es.putEvent(endRequest);
+    }
 }

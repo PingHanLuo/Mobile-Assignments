@@ -43,8 +43,15 @@ public class GameActivity extends AppCompatActivity {
 //                    changeGameState(true);
                 }else{
                     try {
-                        ((Button) v).setText(getString(R.string.Start));
-                    }catch (Exception e){
+                        ns.endGame();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ((TextView)findViewById(R.id.txtResult)).setText("I ended the game");
+                                ((Button) findViewById(R.id.btnStart)).setText(getString(R.string.Start));
+                            }
+                        });
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     //send end to server
@@ -110,8 +117,26 @@ public class GameActivity extends AppCompatActivity {
         });
         reactor.register("GAME_OVER", new EventHandler() {
             @Override
-            public void handleEvent(Event event) {
-
+            public void handleEvent(final Event event) {
+                String result;
+                if((event.get("winner")).equals(MainActivity.getInstance().userid)){
+                    result = "You won the game";
+                }else if((event.get("winner")).equals(MainActivity.getInstance().opponent)){
+                    result = event.get("winner") + " won the game";
+                }else if(event.get("winner").equals("forced")){
+                    result = MainActivity.getInstance().opponent + " ended the game";
+                }else{
+                    result = "The game was a draw";
+                }
+                //bypass the final requirement
+                final String output = result;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((TextView)findViewById(R.id.txtResult)).setText(output);
+                    }
+                });
+                ((Button)findViewById(R.id.btnStart)).setText(R.string.Start);
             }
         });
     }
@@ -126,6 +151,9 @@ public class GameActivity extends AppCompatActivity {
                 for (int i = 0; i < tiles.length; i++) {
                     tiles[i].setClickable(clickable);
                     tiles[i].setEnabled(clickable);
+                    if(clickable){
+                        tiles[i].setImageResource(R.drawable.button_empty);
+                    }
                 }
             }
         });

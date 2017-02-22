@@ -143,33 +143,55 @@ public class Server {
             public void handleEvent(Event event) {
                 if(gameTracker.get(event.get(Fields.ID)).place((int)event.get("move"),(String)event.get(Fields.ID))){
                     try {
-                        if(gameTracker.get(event.get(Fields.ID)).getResult().equals("")) {
-                            //if move succeeds then send result
-                            String player2 = (String) event.get(Fields.RET_ID);
-                            Event p1gameboardEvent = new Event("MOVE_MESSAGE", es);
-                            Event p2gameboardEvent = new Event("MOVE_MESSAGE", users.get(player2).getEventSource());
-                            HashMap<String, Serializable> hm = new HashMap<String, Serializable>();
-                            hm.put("symbol", gameTracker.get(event.get(Fields.ID)).getPreviousSymbol());
-                            hm.put("location", event.get("move"));
-                            p1gameboardEvent.put(Fields.BODY, hm);
-                            p2gameboardEvent.put(Fields.BODY, hm);
-                            p1gameboardEvent.put(Fields.ID,event.get(Fields.ID));
-                            p2gameboardEvent.put(Fields.ID,event.get(Fields.ID));
-                            System.out.println("player 1 " + event.get(Fields.ID));
-                            System.out.println("player 2 " + player2);
-                            users.get(event.get(Fields.ID)).getEventSource().putEvent(p1gameboardEvent);
-                            users.get(player2).getEventSource().putEvent(p2gameboardEvent);
-                        }else{
+                        //if move succeeds then send result
+                        String player2 = (String) event.get(Fields.RET_ID);
+                        Event p1gameboardEvent = new Event("MOVE_MESSAGE", es);
+                        Event p2gameboardEvent = new Event("MOVE_MESSAGE", users.get(player2).getEventSource());
+                        HashMap<String, Serializable> hm = new HashMap<String, Serializable>();
+                        hm.put("symbol", gameTracker.get(event.get(Fields.ID)).getPreviousSymbol());
+                        hm.put("location", event.get("move"));
+                        p1gameboardEvent.put(Fields.BODY, hm);
+                        p2gameboardEvent.put(Fields.BODY, hm);
+                        p1gameboardEvent.put(Fields.ID,event.get(Fields.ID));
+                        p2gameboardEvent.put(Fields.ID,event.get(Fields.ID));
+                        System.out.println("player 1 " + event.get(Fields.ID));
+                        System.out.println("player 2 " + player2);
+                        users.get(event.get(Fields.ID)).getEventSource().putEvent(p1gameboardEvent);
+                        users.get(player2).getEventSource().putEvent(p2gameboardEvent);
+                        if(!gameTracker.get(event.get(Fields.ID)).getResult().equals("")) {
                             //game ended
-                            String player2 = (String) event.get(Fields.RET_ID);
-                            Event p1gameboardEvent = new Event("GAME_OVER", es);
-                            Event p2gameboardEvent = new Event("GAME_OVER", users.get(player2).getEventSource());
-                            es.putEvent(p1gameboardEvent);
-                            users.get(player2).getEventSource().putEvent(p2gameboardEvent);
+                            Event p1gameoverEvent = new Event("GAME_OVER", es);
+                            Event p2gameoverEvent = new Event("GAME_OVER", users.get(player2).getEventSource());
+                            HashMap<String, Serializable> results = new HashMap<>();
+                            results.put("winner",gameTracker.get(event.get(Fields.ID)).getResult());
+                            p1gameoverEvent.put(Fields.BODY,results);
+                            p2gameoverEvent.put(Fields.BODY,results);
+                            users.get(event.get(Fields.ID)).getEventSource().putEvent(p1gameoverEvent);
+                            users.get(player2).getEventSource().putEvent(p2gameoverEvent);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+            }
+        });
+        //user ended game
+        reactor.register("GAME_OVER", new EventHandler() {
+            @Override
+            public void handleEvent(Event event) {
+                try {
+                    String player1 = (String)event.get(Fields.ID);
+                    String player2 = (String) event.get(Fields.RET_ID);
+                    Event p2gameoverEvent = new Event("GAME_OVER", users.get(player2).getEventSource());
+                    HashMap<String, Serializable> results = new HashMap<>();
+                    results.put("winner","forced");
+                    p2gameoverEvent.put(Fields.BODY,results);
+                    users.get(player2).getEventSource().putEvent(p2gameoverEvent);
+                    Game g = new Game(player1,player2);
+                    gameTracker.put(player1,g);
+                    gameTracker.put(player2,g);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
