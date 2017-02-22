@@ -2,15 +2,16 @@ package edu.carleton.COMP2601;
 
 import org.json.JSONArray;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 
 import edu.carleton.COMP2601.communication.Event;
@@ -49,7 +50,6 @@ public class Server {
                     jsonUsers.put(event.get(Fields.ID));
                     users.put((String) event.get(Fields.ID), twr);
                     es.putEvent(response);
-                    System.out.println((String)event.get(Fields.ID));
 
                     //notify other users that a new user have been added
                     HashMap<String,Serializable> hm = new HashMap<String, Serializable>();
@@ -58,7 +58,6 @@ public class Server {
                         Event newUserEvent = new Event("USERS_UPDATED",users.get(username).getEventSource());
                         newUserEvent.put(Fields.BODY,hm);
                         users.get(username).getEventSource().putEvent(newUserEvent);
-                        System.out.println("sending to " + username + hm.get("users").toString());
                     }
                 }catch (Exception e){
                     e.printStackTrace();
@@ -85,13 +84,14 @@ public class Server {
                     String player = (String)event.get(Fields.RET_ID);
                     if((boolean)event.get("status") == true){
                         //start game
-                        Game game = new Game();
+                        Game game = new Game(player,(String)event.get(Fields.ID));
                         gameTracker.put((String)event.get(Fields.ID),game);
                         gameTracker.put(player,game);
                     }
                     System.out.println(player);
                     Event response = new Event("PLAY_GAME_RESPONSE",users.get(player).getEventSource());
                     response.put(Fields.ID,event.get(Fields.ID));
+                    response.put(Fields.RET_ID,player);
                     HashMap<String, Serializable> hm = new HashMap<String, Serializable>();
                     hm.put("status",event.get("status"));
                     response.put(Fields.BODY,hm);
@@ -122,6 +122,54 @@ public class Server {
                     }
                 }catch (Exception e){
                     e.printStackTrace();
+                }
+            }
+        });
+
+        reactor.register("GAME_ON", new EventHandler() {
+            @Override
+            public void handleEvent(Event event) {
+                try {
+                    Event gameOn = new Event("GAME_ON",es);
+                    gameOn.put(Fields.ID,event.get(Fields.ID));
+                    users.get(event.get(Fields.RET_ID)).getEventSource().putEvent(gameOn);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        reactor.register("MOVE_MESSAGE", new EventHandler() {
+            @Override
+            public void handleEvent(Event event) {
+                if(gameTracker.get(event.get(Fields.ID)).place((int)event.get("move"),(String)event.get(Fields.ID))){
+                    try {
+                        if(gameTracker.get(event.get(Fields.ID)).getResult().equals("")) {
+                            //if move succeeds then send result
+                            String player2 = (String) event.get(Fields.RET_ID);
+                            Event p1gameboardEvent = new Event("MOVE_MESSAGE", es);
+                            System.out.println("ret id is " + player2);
+                            Event p2gameboardEvent = new Event("MOVE_MESSAGE", users.get(player2).getEventSource());
+                            HashMap<String, Serializable> hm = new HashMap<String, Serializable>();
+                            hm.put("symbol", gameTracker.get(event.get(Fields.ID)).getPreviousSymbol());
+                            hm.put("location", event.get("move"));
+                            p1gameboardEvent.put(Fields.BODY, hm);
+                            p2gameboardEvent.put(Fields.BODY, hm);
+                            p1gameboardEvent.put(Fields.ID,event.get(Fields.ID));
+                            p2gameboardEvent.put(Fields.ID,event.get(Fields.ID));
+                            es.putEvent(p1gameboardEvent);
+                            users.get(player2).getEventSource().putEvent(p2gameboardEvent);
+                        }else{
+                            //game ended
+                            String player2 = (String) event.get(Fields.RET_ID);
+                            Event p1gameboardEvent = new Event("GAME_OVER", es);
+                            Event p2gameboardEvent = new Event("GAME_OVER", users.get(player2).getEventSource());
+                            es.putEvent(p1gameboardEvent);
+                            users.get(player2).getEventSource().putEvent(p2gameboardEvent);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

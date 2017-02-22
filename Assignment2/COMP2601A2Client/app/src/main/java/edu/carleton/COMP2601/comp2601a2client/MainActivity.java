@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(),event.get(Fields.RET_ID) + " Does not want to play",Toast.LENGTH_LONG);
+                            Toast.makeText(getApplicationContext(),event.get(Fields.RET_ID) + " Does not want to play",Toast.LENGTH_LONG).show();
                         }
                     });
                 }

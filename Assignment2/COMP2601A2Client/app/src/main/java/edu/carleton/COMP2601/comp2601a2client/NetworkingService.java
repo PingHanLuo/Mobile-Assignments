@@ -72,7 +72,6 @@ public class NetworkingService extends Service {
         Event gameOn = new Event("GAME_ON",es);
         gameOn.put(Fields.ID,MainActivity.getInstance().userid);
         gameOn.put(Fields.RET_ID,MainActivity.getInstance().opponent);
-
         es.putEvent(gameOn);
     }
 
