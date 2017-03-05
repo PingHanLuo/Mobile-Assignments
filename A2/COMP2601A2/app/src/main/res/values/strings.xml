@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">COMP2601A2Client</string>
+    <string name="challenge">Challenge</string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
+    <string name="find_player_ui">Tic Tac Toe: Users</string>
+    <string name="Start">Start</string>
+    <string name="GameEnded">Game Ended</string>
+    <string name="Stop">Stop</string>
+</resources>
