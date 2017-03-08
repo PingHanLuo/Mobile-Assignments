@@ -79,6 +79,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "B1E39E7F1E6CC99300C04B33"
+            BuildableName = "TicTacToe.app"
+            BlueprintName = "TicTacToe"
+            ReferencedContainer = "container:COMP1601A3-100998216.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

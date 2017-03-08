@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B149C7A31E70648400DBA7D8 /* ComputerThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149C7A21E70648400DBA7D8 /* ComputerThread.swift */; };
 		B1E39E841E6CC99300C04B33 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E39E831E6CC99300C04B33 /* AppDelegate.swift */; };
 		B1E39E891E6CC99300C04B33 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B1E39E871E6CC99300C04B33 /* Main.storyboard */; };
 		B1E39E8C1E6CC99300C04B33 /* TicTacToe.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B1E39E8A1E6CC99300C04B33 /* TicTacToe.xcdatamodeld */; };
@@ -39,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B149C7A21E70648400DBA7D8 /* ComputerThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComputerThread.swift; sourceTree = "<group>"; };
 		B1E39E801E6CC99300C04B33 /* TicTacToe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TicTacToe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1E39E831E6CC99300C04B33 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B1E39E881E6CC99300C04B33 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -109,10 +111,11 @@
 			children = (
 				B1E39EB41E6CC9D500C04B33 /* button_empty.png */,
 				B1E39EB51E6CC9D500C04B33 /* button_o.png */,
+				B1E39EB61E6CC9D500C04B33 /* button_x.png */,
 				B1E39EBA1E6CCAAE00C04B33 /* Game.swift */,
 				B1E39EBB1E6CCAAE00C04B33 /* ViewController.swift */,
-				B1E39EB61E6CC9D500C04B33 /* button_x.png */,
 				B1E39E831E6CC99300C04B33 /* AppDelegate.swift */,
+				B149C7A21E70648400DBA7D8 /* ComputerThread.swift */,
 				B1E39E871E6CC99300C04B33 /* Main.storyboard */,
 				B1E39E8D1E6CC99300C04B33 /* Assets.xcassets */,
 				B1E39E8F1E6CC99300C04B33 /* LaunchScreen.storyboard */,
@@ -281,6 +284,7 @@
 				B1E39EBC1E6CCAAE00C04B33 /* Game.swift in Sources */,
 				B1E39EBD1E6CCAAE00C04B33 /* ViewController.swift in Sources */,
 				B1E39E841E6CC99300C04B33 /* AppDelegate.swift in Sources */,
+				B149C7A31E70648400DBA7D8 /* ComputerThread.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

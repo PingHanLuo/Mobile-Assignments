@@ -25,6 +25,9 @@ class Game {
         lastMove = ""
     }
     
+    func getGameBoard()->[Character]{
+        return gameBoard
+    }
     
     func getRecentSymbol()->Character{
         if(playerTurn){
