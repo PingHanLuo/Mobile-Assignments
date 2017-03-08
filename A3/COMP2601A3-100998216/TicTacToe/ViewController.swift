@@ -26,11 +26,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var b9: UIButton!
     //collection array for buttons
     var buttons:[UIButton]?
-    
-    
-    
-    
-    
+    @IBOutlet weak var start: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,15 +43,19 @@ class ViewController: UIViewController {
         if g!.place(i: sender.tag, isPlayer: true){
             sender.setImage(#imageLiteral(resourceName: "button_x.png"), for: UIControlState.normal)
             update()
+            result.text = "Button " + sender.tag.description + " pressed."
+            checkEnd()
         }
     }
 
     @IBAction func Toggle(_ sender: UIButton) {
         if sender.currentTitle == "Start"{
-            sender.setTitle("End Game", for: UIControlState.normal)
-            DispatchQueue.global().async{ self.ct!.run(ui: self)}
+            sender.setTitle("Running", for: UIControlState.normal)
+            changeGameState(state: true)
         }else{
-            sender.setTitle("Start", for: UIControlState.normal)
+            ct!.stop()
+            changeGameState(state: false)
+            result.text = "Game ended."
         }
     }
     
@@ -64,12 +64,17 @@ class ViewController: UIViewController {
         if(state){
             g = Game()
             ct = ComputerThread(g: g!)
+            for i in 0...8{
+                buttons![i].isEnabled = true
+            }
+            result.text = ""
             update()
+            DispatchQueue.global().async{ self.ct!.run(ui: self)}
         }else{
             for i in 0...8{
-                let tmpButton = self.view.viewWithTag(i) as? UIButton
-                tmpButton!.isEnabled = false
+                buttons![i].isEnabled = false
             }
+            start.setTitle("Start", for: UIControlState.normal)
         }
     }
     
@@ -78,7 +83,6 @@ class ViewController: UIViewController {
         ct = ComputerThread(g: g!)
         //connect all buttons
         buttons = Array(arrayLiteral: b1,b2,b3,b4,b5,b6,b7,b8,b9)
-        
     }
     
     func update(){
@@ -87,12 +91,31 @@ class ViewController: UIViewController {
             if(board[i] == " "){
                 buttons![i].setImage(#imageLiteral(resourceName: "button_empty.png"), for: UIControlState.normal)
             }else if(board[i] == "x"){
-                buttons![i].setImage(#imageLiteral(resourceName: "button_x.png"), for: UIControlState.normal)
+                buttons![i].setImage(#imageLiteral(resourceName: "button_x"), for: UIControlState.normal)
             }else{
                 buttons![i].setImage(#imageLiteral(resourceName: "button_o.png"), for: UIControlState.normal)
             }
         }
     }
     
+    func compPlace(index:Int, forPlayer:Bool){
+        DispatchQueue.main.async {
+            if(forPlayer){
+                self.buttons![index].setImage(#imageLiteral(resourceName: "button_x.png"), for: UIControlState.normal)
+            }else{
+                self.buttons![index].setImage(#imageLiteral(resourceName: "button_o.png"), for: UIControlState.normal)
+            }
+            self.result.text = "Button " + index.description + " pressed."
+        }
+    }
+    
+    func checkEnd(){
+        DispatchQueue.main.async {
+            if(self.g!.getResult() != ""){
+                self.result.text = "Game is over. " + self.g!.getResult() + " won!"
+                self.changeGameState(state: false)
+            }
+        }
+    }
 }
 

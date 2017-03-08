@@ -35,7 +35,7 @@ class Game {
         }
         return "x"
     }
-    func getLastMove()->String{return lastMove}
+    func getPlayerTurn()->Bool{return playerTurn}
     func getResult()->String{return winner}
     
     func place(i:Int,isPlayer:Bool)->Bool{
