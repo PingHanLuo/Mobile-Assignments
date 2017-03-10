@@ -14,6 +14,7 @@ class Game {
     private var placed:Int
     private var winner:String
     private var lastMove:String
+    private var dsw:DispatchSemaphoreWrapper
     init() {
         gameBoard = []
         for i in 0...8{
@@ -23,6 +24,7 @@ class Game {
         placed = 0
         winner = ""
         lastMove = ""
+        dsw = DispatchSemaphoreWrapper()
     }
     
     func getGameBoard()->[Character]{
@@ -39,24 +41,26 @@ class Game {
     func getResult()->String{return winner}
     
     func place(i:Int,isPlayer:Bool)->Bool{
-        if(checkSquare(i: i)) {
-            if (playerTurn) {
-                gameBoard[i] = "x"
-                playerTurn = false
-            } else {
-                if(isPlayer){
-                    //unauthorized, player cannot play for computer
-                    return false
+        return dsw.sync{
+            if(checkSquare(i: i)) {
+                if (playerTurn) {
+                    gameBoard[i] = "x"
+                    playerTurn = false
+                } else {
+                    if(isPlayer){
+                        //unauthorized, player cannot play for computer
+                        return false
+                    }
+                    gameBoard[i] = "o"
+                    playerTurn = true
                 }
-                gameBoard[i] = "o"
-                playerTurn = true
+                placed += 1
+                checkEnd(n: i)
+                return true
+            }else{
+                //cannot place on already placed tile
+                return false
             }
-            placed += 1
-            checkEnd(n: i)
-            return true
-        }else{
-            //cannot place on already placed tile
-            return false
         }
     }
     
