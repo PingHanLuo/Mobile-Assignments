@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var result: UILabel!
     var g:Game?
     var ct:ComputerThread?
+    var bo:BoardObserver?
     
     //9 buttons outlets
     @IBOutlet weak var b1: UIButton!
@@ -41,8 +42,6 @@ class ViewController: UIViewController {
 
     @IBAction func Place(_ sender: UIButton) {
         if g!.place(i: sender.tag, isPlayer: true){
-            sender.setImage(#imageLiteral(resourceName: "button_x.png"), for: UIControlState.normal)
-            update()
             result.text = "Button " + sender.tag.description + " pressed."
             checkEnd()
         }
@@ -63,12 +62,12 @@ class ViewController: UIViewController {
     func changeGameState(state:Bool){
         if(state){
             g = Game()
+            bo = BoardObserver(controller: self,game: g!)
             ct = ComputerThread(g: g!)
             for i in 0...8{
                 buttons![i].isEnabled = true
             }
             result.text = ""
-            update()
             DispatchQueue.global().async{ self.ct!.run(ui: self)}
         }else{
             for i in 0...8{
@@ -80,6 +79,7 @@ class ViewController: UIViewController {
     
     func setUp(){
         g = Game()
+        bo = BoardObserver(controller: self, game: g!)
         ct = ComputerThread(g: g!)
         //connect all buttons
         buttons = Array(arrayLiteral: b1,b2,b3,b4,b5,b6,b7,b8,b9)
@@ -87,24 +87,21 @@ class ViewController: UIViewController {
     
     func update(){
         var board = g!.getGameBoard()
-        for i in 0...8{
-            if(board[i] == " "){
-                buttons![i].setImage(#imageLiteral(resourceName: "button_empty.png"), for: UIControlState.normal)
-            }else if(board[i] == "x"){
-                buttons![i].setImage(#imageLiteral(resourceName: "button_x"), for: UIControlState.normal)
-            }else{
-                buttons![i].setImage(#imageLiteral(resourceName: "button_o.png"), for: UIControlState.normal)
+        DispatchQueue.main.async {
+            for i in 0...8{
+                if(board[i] == " "){
+                    self.buttons![i].setImage(#imageLiteral(resourceName: "button_empty.png"), for: UIControlState.normal)
+                }else if(board[i] == "x"){
+                    self.buttons![i].setImage(#imageLiteral(resourceName: "button_x"), for: UIControlState.normal)
+                }else{
+                    self.buttons![i].setImage(#imageLiteral(resourceName: "button_o.png"), for: UIControlState.normal)
+                }
             }
         }
     }
     
     func compPlace(index:Int, forPlayer:Bool){
         DispatchQueue.main.async {
-            if(forPlayer){
-                self.buttons![index].setImage(#imageLiteral(resourceName: "button_x.png"), for: UIControlState.normal)
-            }else{
-                self.buttons![index].setImage(#imageLiteral(resourceName: "button_o.png"), for: UIControlState.normal)
-            }
             self.result.text = "Button " + index.description + " pressed."
         }
     }

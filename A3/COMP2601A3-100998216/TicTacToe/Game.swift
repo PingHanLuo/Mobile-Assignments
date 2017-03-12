@@ -9,11 +9,20 @@
 import Foundation
 
 class Game {
+    private var boardObserver:Observer?
     private var gameBoard:[Character]
     private var playerTurn:Bool
     private var placed:Int
+    private var _placed:Int?{
+        set{
+            self.placed = newValue!
+            notify()
+        }
+        get{
+            return self.placed
+        }
+    }
     private var winner:String
-    private var lastMove:String
     private var dsw:DispatchSemaphoreWrapper
     init() {
         gameBoard = []
@@ -21,9 +30,8 @@ class Game {
             gameBoard.insert(" ", at: i)
         }
         playerTurn = true
-        placed = 0
         winner = ""
-        lastMove = ""
+        placed = 0
         dsw = DispatchSemaphoreWrapper()
     }
     
@@ -54,7 +62,7 @@ class Game {
                     gameBoard[i] = "o"
                     playerTurn = true
                 }
-                placed += 1
+                _placed = placed - 1
                 checkEnd(n: i)
                 return true
             }else{
@@ -113,5 +121,12 @@ class Game {
                 winner = "Computer"
             }
         }
+    }
+    private func notify(){
+        boardObserver!.update()
+    }
+    public func attachObserver(observer:Observer){
+        self.boardObserver = observer
+        _placed = 0
     }
 }

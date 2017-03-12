@@ -10,6 +10,8 @@
 		B116BB011E730B6C0099CA8C /* TicTacToeUnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B116BB001E730B6C0099CA8C /* TicTacToeUnitTests.swift */; };
 		B116BB031E730DFF0099CA8C /* DispatchSemaphoreWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B116BB021E730DFF0099CA8C /* DispatchSemaphoreWrapper.swift */; };
 		B149C7A31E70648400DBA7D8 /* ComputerThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = B149C7A21E70648400DBA7D8 /* ComputerThread.swift */; };
+		B154FCD81E75E8AE00A459F7 /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B154FCD71E75E8AE00A459F7 /* Observer.swift */; };
+		B154FCDA1E75EEB600A459F7 /* BoardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = B154FCD91E75EEB600A459F7 /* BoardObserver.swift */; };
 		B1E39E841E6CC99300C04B33 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E39E831E6CC99300C04B33 /* AppDelegate.swift */; };
 		B1E39E891E6CC99300C04B33 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B1E39E871E6CC99300C04B33 /* Main.storyboard */; };
 		B1E39E8C1E6CC99300C04B33 /* TicTacToe.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B1E39E8A1E6CC99300C04B33 /* TicTacToe.xcdatamodeld */; };
@@ -42,6 +44,8 @@
 		B116BB001E730B6C0099CA8C /* TicTacToeUnitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TicTacToeUnitTests.swift; sourceTree = "<group>"; };
 		B116BB021E730DFF0099CA8C /* DispatchSemaphoreWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchSemaphoreWrapper.swift; sourceTree = "<group>"; };
 		B149C7A21E70648400DBA7D8 /* ComputerThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComputerThread.swift; sourceTree = "<group>"; };
+		B154FCD71E75E8AE00A459F7 /* Observer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
+		B154FCD91E75EEB600A459F7 /* BoardObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardObserver.swift; sourceTree = "<group>"; };
 		B1E39E801E6CC99300C04B33 /* TicTacToe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TicTacToe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1E39E831E6CC99300C04B33 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B1E39E881E6CC99300C04B33 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -109,6 +113,8 @@
 			children = (
 				B116BB021E730DFF0099CA8C /* DispatchSemaphoreWrapper.swift */,
 				B1E39EBA1E6CCAAE00C04B33 /* Game.swift */,
+				B154FCD71E75E8AE00A459F7 /* Observer.swift */,
+				B154FCD91E75EEB600A459F7 /* BoardObserver.swift */,
 				B1E39EBB1E6CCAAE00C04B33 /* ViewController.swift */,
 				B1E39E831E6CC99300C04B33 /* AppDelegate.swift */,
 				B149C7A21E70648400DBA7D8 /* ComputerThread.swift */,
@@ -279,6 +285,8 @@
 				B116BB031E730DFF0099CA8C /* DispatchSemaphoreWrapper.swift in Sources */,
 				B1E39EBD1E6CCAAE00C04B33 /* ViewController.swift in Sources */,
 				B1E39E841E6CC99300C04B33 /* AppDelegate.swift in Sources */,
+				B154FCD81E75E8AE00A459F7 /* Observer.swift in Sources */,
+				B154FCDA1E75EEB600A459F7 /* BoardObserver.swift in Sources */,
 				B149C7A31E70648400DBA7D8 /* ComputerThread.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
